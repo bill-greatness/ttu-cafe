@@ -1,6 +1,6 @@
 // auth functions
 
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   updateDoc,
   getCountFromServer,
@@ -20,6 +20,10 @@ import { auth, db, storage } from "./config";
 export const signIn = ({ email, password }) => {
   return signInWithEmailAndPassword(auth, email, password);
 };
+
+export const createNewUser = ({ email, password }) => {
+  return createUserWithEmailAndPassword(auth, email, password)
+}
 
 export const logOut = async () => {
   return signOut(auth).then(() => localStorage.clear());

@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ImSpinner } from "react-icons/im";
-import { signIn } from "../fb/function";
+import { readDocuments, searchQuery, signIn } from "../fb/function";
 import { Feedback } from "../components/Motion";
-
+import logo from '../assets/tcafe.png';
 
 export default function Login() {
     const [info, setInfo] = useState({ email: "", password: "" });
@@ -12,12 +12,20 @@ export default function Login() {
     const [spin, setSpin] = useState(false);
     const [show, setShow] = useState(false)
     const [codes, setCode] = useState({})
+    const [users, setUsers] = useState([])
 
     const firstRef = useRef()
     const secondRef = useRef()
     const thirdRef = useRef()
     const fourthRef = useRef()
     const verifyRef = useRef()
+
+    useEffect(() => {
+        readDocuments({
+            path:"/users",
+            getData: setUsers
+        })
+    },[])
 
     const [verified, setVerified] = useState(false);
 
@@ -47,8 +55,15 @@ export default function Login() {
     const loginToApp = async (e) => {
         e.preventDefault();
         setSpin(true);
+        console.log(users)
+        let user = users.find(user => user.email === info.email)
 
-        signIn({ ...info }).then(user => {
+        if (!user) {
+            setResponse({open:true, type:'error', message:"User not found"});
+            return
+        }
+
+        signIn({ ...info }).then(usr => {
             // navigate to dashboard page
             // send verificaton code...
             localStorage.setItem("user", JSON.stringify(user));
@@ -72,8 +87,9 @@ export default function Login() {
                 className="flex flex-col items-center w-full md:w-1/3 gap-4 p-5 md:p-20"
             >
                 <div>
-                    <div className="w-40 h-40 bg-gray-400 rounded-full mb-10"></div>
-                    <h2 className="text-3xl text-center">TTU Cafe</h2>
+                    <img src={logo} className="w-40 p-2 h-40  border-2 border-black rounded-full mb-10 object-contain"/>
+                    <h2 className="text-3xl text-center">TTU Club House</h2>
+                    <p>Login to Continue</p>
                 </div>
 
                 <input

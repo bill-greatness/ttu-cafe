@@ -1,16 +1,16 @@
 import { useState } from "react"
 import { Motion, Feedback, Spin } from "./Motion"
 import { uploadFiles, insertData } from "../fb/function"
-import {PaystackButton} from 'react-paystack'
+import { PaystackButton } from 'react-paystack'
 import { config } from "./configs"
 
 export const Food = ({ data, user, makeOrder }) => {
     return (
-        <div className="w-1/6  bg-red-400 shadow-md h-80 shrink-0 rounded-md hover:p-0 transition-all duration-100">
+        <div className="w-[48%] md:w-1/6  bg-red-400 shadow-md h-80 shrink-0 rounded-md hover:p-0 transition-all duration-100">
             <img className="w-full h-60 object-cover cursor-pointer" onClick={() => makeOrder(data)} src={data?.photos[0]}></img>
             <div className="flex flex-col p-2">
                 <p className="text-xl font-normal text-white">{data?.name}</p>
-                <p className="font-bold text-3xl">¢{data?.price}</p>
+                <p className="font-bold text-md md:text-3xl">¢{data?.price}</p>
             </div>
             {/* display edit and delete button if admin */}
             {user?.role === "admin" && <div className="flex items-center justify-between">
@@ -107,7 +107,7 @@ export const AddNewFood = () => {
     )
 }
 
-export const MakeOrder = ({ order, user  }) => {
+export const MakeOrder = ({ order, user, completeOrder, close }) => {
 
 
     const [quantity, setQuantity] = useState(1);
@@ -115,32 +115,41 @@ export const MakeOrder = ({ order, user  }) => {
 
     const payProps = {
         ...config(user?.email, price),
-        text: `Make Order ¢${price}`,
-        onSuccess: (reference) => console.log(reference),
+        text: `Proceed ¢${price}`,
+        onSuccess: (reference) => completeOrder({
+            ...order,
+            quantity,
+            ref: reference,
+            total: price,
+            status: "pending",
+            orderedAt: new Date(),
+            orderedBy: user?.email,
+        }),
         onClose: () => alert("closed"),
-      }
+    }
 
-      
+
     return (
-        <div className="w-1/4 fixed right-0 top-0 bg-gray-50 h-screen">
+        <div className="w-full md:w-1/4 border-t-2 border-t-black overflow-y-auto fixed bottom-0 md:right-0 md:top-0 bg-gray-300 h-1/2 md:h-screen">
             <div className="flex flex-col gap-3 p-10">
-                <h3 className="text-2xl py-3">Make Order</h3> 
+                <h3 className="text-2xl py-3">Make Order</h3>
                 {/* Display order details */}
-                 <img className="w-80 h-80 object-cover" alt={order?.name} src={order?.photos[0]}/> 
-                 <div>
-                    <h1 className="text-3xl">{order?.name}</h1>    
+                <img className=" w-56 h-56 md:w-80 md:h-80 object-cover" alt={order?.name} src={order?.photos[0]} />
+                <div>
+                    <h1 className="text-3xl">{order?.name}</h1>
                     <p className="text-md">{order.description}</p>
-                </div>   
-                {/* Display selected food items and price */}
-                <div className="flex flex-col">
-                    <label htmlFor="quantity">Quantity</label>
-                    <input type="number" className="p-3 w-fit outline-none" name="quantity" id="quantity" min={1} onChange={(e) => setQuantity(parseInt(e.target.value))} />
                 </div>
-                <PaystackButton
-                className="bg-orange-500 p-3 text-white"
-                    {...payProps}
-                />
-                {/* <button disabled={quantity < 1} className="p-3 text-xl bg-black text-white font-normal">Place Order ¢{price}</button> */}
+                {/* Display selected food items and price */}
+                <div className="flex gap-2">
+
+                    <input type="number" placeholder="Quantity" className="w-fit bg-white px-2 outline-none" name="quantity" id="quantity" min={1} onChange={(e) => setQuantity(parseInt(e.target.value))} />
+
+                    <PaystackButton
+                        className="bg-orange-500 flex-1 p-2 shrink-0 text-white"
+                        {...payProps}
+                    />
+                </div>
+                <button onClick={() => close()} className="p-3 text-xl bg-black text-white w-full font-normal">Close</button>
             </div>
         </div>
     )
