@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { ImSpinner } from "react-icons/im";
-import { readDocuments, searchQuery, signIn } from "../fb/function";
+import { readDocuments, signIn } from "../fb/function";
 import { Feedback } from "../components/Motion";
 import logo from '../assets/tcafe.png';
 
@@ -55,7 +55,6 @@ export default function Login() {
     const loginToApp = async (e) => {
         e.preventDefault();
         setSpin(true);
-        console.log(users)
         let user = users.find(user => user.email === info.email)
 
         if (!user) {
@@ -88,7 +87,7 @@ export default function Login() {
             >
                 <div>
                     <img src={logo} className="w-40 p-2 h-40  border-2 border-black rounded-full mb-10 object-contain"/>
-                    <h2 className="text-3xl text-center">TTU Club House</h2>
+                    <h2 className="text-3xl text-center">TUTAG Club House</h2>
                     <p>Login to Continue</p>
                 </div>
 

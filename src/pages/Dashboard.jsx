@@ -91,7 +91,7 @@ export default function Dashboard() {
             <h3 className="p-3 text-md md:text-2xl">Browse your favorite foods.</h3>
             <div className="flex items-center  justify-start flex-wrap gap-2  p-4 w-full md:p-10">
                 {items?.map((data, idx) => (
-                    <Food key={idx} data={data} user={null} makeOrder={makeOrder} />
+                    <Food key={idx} data={data} user={user} makeOrder={makeOrder} />
                 ))}
             </div>
 

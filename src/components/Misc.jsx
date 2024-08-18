@@ -1,21 +1,25 @@
 import { useState } from "react"
 import { Motion, Feedback, Spin } from "./Motion"
-import { uploadFiles, insertData } from "../fb/function"
+import { uploadFiles, insertData, deleteDocument } from "../fb/function"
 import { PaystackButton } from 'react-paystack'
 import { config } from "./configs"
+import { BsTrash } from "react-icons/bs"
 
 export const Food = ({ data, user, makeOrder }) => {
+   
     return (
-        <div className="w-[48%] md:w-1/6  bg-red-400 shadow-md h-80 shrink-0 rounded-md hover:p-0 transition-all duration-100">
+        <div className="w-[48%] md:w-1/6 rounded-sm border overflow-hidden  shadow-md h-auto shrink-0 hover:p-0 transition-all duration-100">
             <img className="w-full h-60 object-cover cursor-pointer" onClick={() => makeOrder(data)} src={data?.photos[0]}></img>
             <div className="flex flex-col p-2">
-                <p className="text-xl font-normal text-white">{data?.name}</p>
-                <p className="font-bold text-md md:text-3xl">¢{data?.price}</p>
+                <p className="text-xl font-normal text-black capitalize">{data?.name}</p>
+                <p className="font-bold text-sm md:text-xl">¢{Number(data?.price).toFixed(2)}</p>
             </div>
             {/* display edit and delete button if admin */}
-            {user?.role === "admin" && <div className="flex items-center justify-between">
+            {user?.role === "admin" && <div className="flex bg-yellow-500 p-1 items-center justify-between">
                 <button>Edit</button>
-                <button>Delete</button>
+                <button onClick={() => deleteDocument({ path: "foods", id: data.id, setResponse: () => { } })}>
+                        <BsTrash size={20} color="red" />
+                    </button>
             </div>}
         </div>
     )

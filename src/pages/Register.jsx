@@ -46,7 +46,10 @@ export default function Register() {
                 createNewUser({ ...info }).then(() => {
                     setResponse({ open: true, type: 'success', message: "User created successfully. You can now login" })
                     setSpin(false)
-                    setTimeout(() => navigate("/login"), 2000)
+                    setTimeout(() => {
+                        localStorage.setItem("user", JSON.stringify({...info, role:"role"}));
+                        navigate("/");
+                    }, 2000)
 
                 })
 
@@ -69,7 +72,7 @@ export default function Register() {
             >
                 <div className="flex items-center justify-center flex-col">
                     <div className="w-40 h-40 bg-gray-400 rounded-full mb-10"></div>
-                    <h2 className="text-3xl text-center">TTU Club House</h2>
+                    <h2 className="text-3xl text-center">TUTAG Club House</h2>
                     <p className="text-center">Register to Continue </p>
                 </div>
 
