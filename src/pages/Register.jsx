@@ -35,7 +35,7 @@ export default function Register() {
                 setResponse({ open: true, type: 'error', message: "User already exists" })
                 return
             }
-
+            let pwd = info.password
             delete info.password
             await insertData({
                 path: "users/",
@@ -43,7 +43,7 @@ export default function Register() {
                 data: { ...info, role: "user" },
                 setResponse: setResponse,
             }).then(() => {
-                createNewUser({ ...info }).then(() => {
+                createNewUser({ ...info, password: pwd }).then(() => {
                     setResponse({ open: true, type: 'success', message: "User created successfully. You can now login" })
                     setSpin(false)
                     setTimeout(() => {
