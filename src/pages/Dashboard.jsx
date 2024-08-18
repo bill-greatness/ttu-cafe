@@ -70,6 +70,9 @@ export default function Dashboard() {
                         <div className="flex items-center gap-2">
                             <button onClick={() => showFoods(!foods)}>Foods</button>
                             <button onClick={() => showOrders(!orders)}>Order</button>
+                            <button onClick={logout} className="flex gap-2 items-center">
+                              Logout <BiSolidLogOut color="red" size={30}/>
+                            </button>
                         </div>}
 
                     {user?.role !== 'admin' && (
